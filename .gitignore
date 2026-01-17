@@ -1,0 +1,30 @@
+
+# ========================
+# Environment files
+# ========================
+.env
+.env.*
+!.env.example
+frontend/.env.local
+backend/.env
+
+# ========================
+# Node.js
+# ========================
+node_modules/
+**/node_modules/
+
+# ========================
+# Build outputs
+# ========================
+dist/
+build/
+out/
+
+# ========================
+# Next.js
+# ========================
+.next/
+frontend/.next/
+frontend/out/
+
