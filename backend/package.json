@@ -22,15 +22,15 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@types/cors": "^2.8.19",
-    "@types/express": "^5.0.6",
-    "@types/nodemailer": "^7.0.5",
     "@types/uuid": "^10.0.0",
     "nodemon": "^3.1.11",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/nodemailer": "^7.0.5",
     "@types/node": "^25.0.9",
     "bullmq": "^5.66.5",
     "cors": "^2.8.5",
