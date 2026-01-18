@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Clock, Send, PenSquare } from "lucide-react";
+import { Clock, Send, PenSquare, Loader2 } from "lucide-react";
 // import { cn } from "@/lib/utils";
 import { cn } from "@/lib/util";
 import { useSession } from "next-auth/react";
@@ -17,7 +17,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ onCompose }) => {
   const pathname = usePathname();
   const { data: session } = useSession();
-  const { stats } = useEmailStats();
+  const { stats, isLoading } = useEmailStats();
 
   const menuItems = [
     {
@@ -104,14 +104,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ onCompose }) => {
                     <Icon className="w-5 h-5" />
                     <span className="font-medium">{item.label}</span>
                   </div>
-                  <span
-                    className={cn(
-                      "text-sm font-semibold min-w-[24px] text-right",
-                      isActive ? "text-green-600" : "text-gray-500"
-                    )}
-                  >
-                    {item.count}
-                  </span>
+                  {isLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                  ) : (
+                    <span
+                      className={cn(
+                        "text-sm font-semibold min-w-[24px] text-right px-2 py-0.5 rounded-full",
+                        isActive 
+                          ? "bg-green-100 text-green-700" 
+                          : "bg-gray-100 text-gray-600"
+                      )}
+                      title={`${item.label}: ${item.count}`}
+                    >
+                      {item.count}
+                    </span>
+                  )}
                 </Link>
               );
             })}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { emailApi } from "@/lib/api";
 
 interface EmailStats {
@@ -27,30 +27,55 @@ export function EmailStatsProvider({ children }: { children: React.ReactNode }) 
   });
   const [isLoading, setIsLoading] = useState(true);
 
-  const refreshStats = async () => {
+  const refreshStats = useCallback(async () => {
     try {
       setIsLoading(true);
       const data = await emailApi.getStats();
-      setStats({
-        scheduled: data.database.scheduled + data.database.queued,
-        sent: data.database.sent,
-        failed: data.database.failed,
-      });
+      
+      console.log("📊 Raw stats response:", data); // Debug log
+      
+      if (data && data.database) {
+        const scheduledCount = (data.database.scheduled || 0) + (data.database.queued || 0);
+        const sentCount = data.database.sent || 0;
+        const failedCount = data.database.failed || 0;
+        
+        console.log("✅ Parsed stats - Scheduled:", scheduledCount, "Sent:", sentCount, "Failed:", failedCount);
+        
+        setStats({
+          scheduled: scheduledCount,
+          sent: sentCount,
+          failed: failedCount,
+        });
+      } else {
+        console.error("❌ Invalid stats structure:", data);
+      }
     } catch (error) {
-      console.error("Error fetching email stats:", error);
+      console.error("❌ Error fetching email stats:", error);
+      if (error instanceof Error) {
+        console.error("Error details:", error.message);
+      }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
+    console.log("🚀 EmailStatsProvider mounted, fetching initial stats...");
     refreshStats();
     
     // Refresh every 10 seconds
-    const interval = setInterval(refreshStats, 10000);
+    const interval = setInterval(() => {
+      console.log("🔄 Auto-refreshing stats...");
+      refreshStats();
+    }, 10000);
     
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      console.log("🛑 EmailStatsProvider unmounting, clearing interval");
+      clearInterval(interval);
+    };
+  }, [refreshStats]);
+
+  console.log("📈 Current stats:", stats); // Debug log
 
   return (
     <EmailStatsContext.Provider value={{ stats, refreshStats, isLoading }}>
