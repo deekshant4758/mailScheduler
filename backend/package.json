@@ -4,6 +4,7 @@
   "description": "Production-grade email scheduler with BullMQ and Redis",
   "main": "dist/server.js",
   "scripts": {
+    "migrate": "node runMigration.js",
     "dev": "nodemon --exec ts-node src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
@@ -12,7 +13,12 @@
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f"
   },
-  "keywords": ["email", "scheduler", "bullmq", "redis"],
+  "keywords": [
+    "email",
+    "scheduler",
+    "bullmq",
+    "redis"
+  ],
   "author": "",
   "license": "MIT",
   "devDependencies": {
