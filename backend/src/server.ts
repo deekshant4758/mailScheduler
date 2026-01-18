@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const PORT = process.env.PORT || 5000;
+const PORT = parseInt(process.env.PORT || '5000', 10);
 
 async function startServer() {
   try {
@@ -43,7 +43,7 @@ async function startServer() {
     await EmailService.restoreScheduledEmails();
 
     // Start Express server
-    app.listen(PORT, () => {
+    app.listen(PORT, '0.0.0.0', () => {
       console.log(`\n✅ Server running on port ${PORT}`);
       console.log(`📧 API available at http://localhost:${PORT}/api/v1`);
       console.log(`🏥 Health check: http://localhost:${PORT}/health\n`);
@@ -64,7 +64,7 @@ async function startServer() {
 
   } catch (error) {
     console.error('❌ Failed to start server:', error);
-    process.exit(1);
+    // process.exit(1);
   }
 }
 
