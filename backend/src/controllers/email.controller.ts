@@ -200,6 +200,8 @@ export class EmailController {
       const stats = await EmailService.getEmailStats();
       const queueStats = await QueueService.getQueueStats();
 
+      console.log("📊 Stats endpoint called - Database:", stats, "Queue:", queueStats);
+
       res.json({
         success: true,
         data: {
@@ -208,6 +210,7 @@ export class EmailController {
         },
       });
     } catch (error) {
+      console.error("❌ Error in stats endpoint:", error);
       next(error);
     }
   }
