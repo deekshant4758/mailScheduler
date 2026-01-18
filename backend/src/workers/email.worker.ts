@@ -9,6 +9,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+
 export class EmailWorker {
   private static worker: Worker;
   private static transporter = createEmailTransporter();
@@ -50,17 +51,20 @@ export class EmailWorker {
       // Update status to queued
       await this.updateEmailStatus(id, 'queued');
 
+      // Check if SMTP is configured
+      if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+        throw new Error('SMTP not configured. Please set SMTP_HOST, SMTP_USER, and SMTP_PASS environment variables.');
+      }
+
       // Check rate limits
       const rateLimit = await this.checkRateLimits(senderEmail, tenantId);
       
       if (!rateLimit.allowed) {
-        // Reschedule to next available slot
         const nextSlot = rateLimit.nextAvailableSlot;
         const delayMs = nextSlot.getTime() - Date.now();
         
         console.log(`⏱️ Rate limit reached for ${senderEmail}. Rescheduling to ${nextSlot}`);
         
-        // Move job to delayed queue
         await job.moveToDelayed(delayMs, job.token!);
         return;
       }
@@ -75,25 +79,18 @@ export class EmailWorker {
 
       console.log(`📧 Email sent: ${info.messageId}`);
       
-      // Get preview URL for Ethereal (only works with Ethereal SMTP)
       if (process.env.SMTP_HOST?.includes('ethereal')) {
         const previewUrl = `https://ethereal.email/message/${info.messageId}`;
         console.log(`🔗 Preview URL: ${previewUrl}`);
       }
 
-      // Update status to sent
       await this.updateEmailStatus(id, 'sent', new Date());
-
-      // Increment rate limit counters
       await this.incrementRateLimitCounters(senderEmail, tenantId);
 
     } catch (error: any) {
       console.error(`Error sending email ${id}:`, error);
-      
-      // Update status to failed
       await this.updateEmailStatus(id, 'failed', undefined, error.message);
-      
-      throw error; // Let BullMQ handle retry logic
+      throw error;
     }
   }
 
