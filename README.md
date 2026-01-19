@@ -7,6 +7,25 @@ A production-grade email scheduling system built with Next.js, Express, BullMQ, 
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue?style=flat-square&logo=typescript)
 ![Redis](https://img.shields.io/badge/Redis-7.0-red?style=flat-square&logo=redis)
 
+## ⚠️ Render Free Tier – Outbound Network Limitation
+
+> **Important Notice:**  
+> When deployed on **Render’s free tier**, outbound network access is disabled.  
+> As a result, SMTP connections to external email providers (such as Gmail or Ethereal) are blocked.
+
+### Impact
+- ❌ Emails **will not be sent**
+- ⚠️ Email delivery attempts will result in **connection timeout** errors
+- ✅ Email scheduling, queuing, rate limiting, retries, and persistence **continue to work correctly**
+
+### Recommendation
+To observe the **expected email-sending behavior**:
+- ✅ Run the backend **locally (localhost)** where outbound SMTP connections are allowed
+- 🔁 Or deploy on a platform / paid tier that permits **outbound network access**
+
+This limitation is specific to the **Render free tier** and not an issue with the application implementation.
+
+
 ## 🎯 Features
 
 ### Backend
@@ -674,8 +693,8 @@ This project is licensed under the MIT License.
 ## 👨‍💻 Author
 
 **Your Name**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- GitHub: [@deekshant4758/](https://github.com/deekshant4758/)
+- Email: deekshant2003@gmail.com
 
 ---
 
@@ -698,4 +717,4 @@ For issues and questions:
 
 ---
 
-**Built with ❤️ for ReachInbox**
+**Built with ❤️ by Deekshant Gupta**
