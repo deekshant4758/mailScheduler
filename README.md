@@ -712,8 +712,8 @@ This project is licensed under the MIT License.
 
 For issues and questions:
 - Open an issue on GitHub
-- Email: support@reachinbox.com
-- Documentation: [Wiki](https://github.com/yourusername/reachinbox-scheduler/wiki)
+- Email: deekshant2003@gmail.com
+<!-- - Documentation: [Wiki](https://github.com/yourusername/reachinbox-scheduler/wiki) -->
 
 ---
 
